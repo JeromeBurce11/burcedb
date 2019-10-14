@@ -5,13 +5,17 @@
  */
 package burcedb;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Scanner;
-
 /**
  *
  * @author 2ndyrGroupC
  */
 public class Schedule {
+
     Scanner input = new Scanner(System.in);
 
     private int id;
@@ -87,7 +91,7 @@ public class Schedule {
     public void setId(int id) {
         this.id = id;
     }
-
+        
     public int getAccId() {
         return accId;
     }
@@ -116,21 +120,25 @@ public class Schedule {
                     checkUnit();
                     System.out.print("Schedule: ");
                     String schedule = input.next();
-
                 } else {
                     break;
                 }
             } catch (Exception e) {
                 break;
             }
-
         }
-        System.out.println("Your schedule was been saved.");
-
+    }
+    public void savesche() {
+        String sql = "INSERT INTO schedule VALUES (id, AccoundId,'" + course + "','" +units + "','"+schedule+"')";
+       try (Connection conn = this.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void checkUnit() {
-
         String unit;
         while (true) {
             try {
@@ -153,4 +161,7 @@ public class Schedule {
         this.units = Integer.parseInt(unit);
     }
 
+   
+
+  
 }

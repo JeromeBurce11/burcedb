@@ -21,7 +21,7 @@ public class PersonalInformation extends Accounts {
     private String fname;
     private String lname;
     private int age;
-    private int accNumber;
+    private int accNumber ;
     private int id;
 //    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 //    static final String DB_URL = "jdbc:mysql://localhost/loginaccounts";
@@ -108,14 +108,15 @@ public class PersonalInformation extends Accounts {
     public String toString() {
         return String.format("%d\t%d\t%s\t%s\t%d", this.id, this.accNumber, this.fname, this.lname, this.age);
     }
-    
+
     public void personalInformation() {
         this.checkFname();
         this.checkLname();
         this.checkAge();
     }
-     public void saveinfo() {
-        String sql = "INSERT INTO personalinformation VALUES (id, AccoundId,'" + this.fname + "','" +this.lname + "','"+this.age+"')";
+
+    public void saveinfo() {
+        String sql = "INSERT INTO personalinformation VALUES (id, " +this.getAcc_id()  + ",'" + this.fname + "','" + this.lname + "','" + this.age + "')";
         try (Connection conn = this.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.executeUpdate();
@@ -123,7 +124,6 @@ public class PersonalInformation extends Accounts {
             System.out.println(e.getMessage());
         }
     }
-
 
     public void checkAge() {
 
@@ -191,18 +191,10 @@ public class PersonalInformation extends Accounts {
         System.out.println("Account ID: ");
         int a = input.nextInt();
 
-        
-                this.checkFname();
-                this.checkLname();
-                this.checkAge();
+        this.checkFname();
+        this.checkLname();
+        this.checkAge();
 
-        
-     
-      
     }
-    
-    
-    
-
 
 }

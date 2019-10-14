@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -22,6 +23,7 @@ public class Accounts {
     private String username;
     private String password;
     private int Id;
+    int accountID ;
 
     Accounts() {
     }
@@ -102,7 +104,7 @@ public class Accounts {
                                     String password1 = input.next();
                                     if (password.equals(password1)) {
                                         System.out.println(" password match!");
-                                        
+
                                         status = false;
                                         break;
 
@@ -122,6 +124,7 @@ public class Accounts {
             }
 
         }
+
     }
 
     public boolean isString(String input) {
@@ -134,13 +137,66 @@ public class Accounts {
     }
 
     public void save() {
-        String sql = "INSERT INTO Accounts VALUES (id,'" + username + "','" + password + "')";
-        try (Connection conn = this.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        String sql = "INSERT INTO Accounts ( username, password)  VALUES ('" + username + "','" + password + "')";
+        try (Connection conn = this.connect()) {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        System.out.println(Id);
+        System.out.println(username);
+    }
+
+    public int getAcc_id() {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            //STEP 2: Register JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Connecting to a selected database...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Connected database successfully...");
+
+            //STEP 4: Execute a query
+            System.out.println("Creating statement...");
+            stmt = conn.createStatement();
+
+            String sql = "SELECT `id` FROM `Accounts` WHERE username= '" + username + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            //STEP 5: Extract data from result set
+            while (rs.next()) {
+                //Retrieve by column name
+                int id = rs.getInt("id");
+                accountID = id;
+                System.out.print("ID: " + accountID);
+              
+            }
+            rs.close();
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            try {
+                if (stmt != null) {
+                    conn.close();
+                }
+            } catch (SQLException se) {
+            }// do nothing
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }//end finally try
+        }//end try
+        return accountID;
+
     }
 
     public void delete(int id) {

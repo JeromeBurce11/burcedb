@@ -29,8 +29,17 @@ public class Burcedb {
                     System.out.println("-----------------Creating an account!-----------------");
                     account.createUserPass();
                     System.out.println("You want to add personal information?\npress 1 if yes\npress 2 if no");
-                    int ynoption = input.nextInt();
-                    switch (ynoption) {
+                    int Pynoption = input.nextInt();
+                    switch (Pynoption) {
+                        case 1:
+                            PersonalInfo.personalInformation();
+                            break;
+                        case 2:
+                            break;
+                    }
+                    System.out.println("You want to add schedule?\npress 1 if yes\npress 2 if no");
+                    int Synoption = input.nextInt();
+                    switch (Synoption) {
                         case 1:
                             PersonalInfo.personalInformation();
                             break;
@@ -117,6 +126,7 @@ public class Burcedb {
                     break;
                 case 6:
                     account.save();
+                    account.getAcc_id();
                     PersonalInfo.saveinfo();
                     break;
                 case 7:
